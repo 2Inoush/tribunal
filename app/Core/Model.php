@@ -3,13 +3,18 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use PDO;
+
 /**
  * Model
  *
- * Modele de base : expose la connexion PDO aux modeles concrets.
- *
- * TODO : a implementer.
+ * Classe de base des modeles (Utilisateur, Affaire, Vote).
+ * Elle ne sert qu'a leur donner un raccourci vers la connexion PDO.
  */
-final class Model
+abstract class Model
 {
+    protected static function db(): PDO
+    {
+        return Database::connexion();
+    }
 }
