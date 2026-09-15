@@ -1,0 +1,12 @@
+# Toutes les URL passent par index.php (front controller)
+RewriteEngine On
+
+# On laisse passer les fichiers et dossiers reellement presents (assets)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.php [QSA,L]
+
+# Pas de listing de repertoire
+Options -Indexes

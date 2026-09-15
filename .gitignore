@@ -1,0 +1,18 @@
+# Environnement
+.env
+
+# Dependances
+/vendor/
+
+# Logs et fichiers temporaires
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Systeme
+.DS_Store
+Thumbs.db
+
+# Editeurs
+.idea/
+.vscode/
+*.swp
