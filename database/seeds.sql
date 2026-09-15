@@ -9,11 +9,20 @@
 
 USE tribunal;
 
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE vote;
-TRUNCATE TABLE affaire;
-TRUNCATE TABLE utilisateur;
-SET FOREIGN_KEY_CHECKS = 1;
+-- Remise a zero.
+-- On utilise DELETE et non TRUNCATE : MySQL refuse de tronquer une table
+-- referencee par une cle etrangere (erreur 1701), et l'onglet SQL de
+-- phpMyAdmin reactive la verification des cles etrangeres malgre un
+-- SET FOREIGN_KEY_CHECKS = 0. DELETE dans l'ordre enfant -> parent
+-- fonctionne partout, sans reglage particulier.
+DELETE FROM vote;
+DELETE FROM affaire;
+DELETE FROM utilisateur;
+
+-- DELETE ne remet pas les compteurs a zero, contrairement a TRUNCATE.
+ALTER TABLE vote        AUTO_INCREMENT = 1;
+ALTER TABLE affaire     AUTO_INCREMENT = 1;
+ALTER TABLE utilisateur AUTO_INCREMENT = 1;
 
 
 -- --- Utilisateurs ----------------------------------------------------
