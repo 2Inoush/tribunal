@@ -18,7 +18,7 @@
     <?php if (estConnecte()): ?>
         <p class="text-gray-600">
             Bonjour <span class="font-semibold"><?= e(utilisateurConnecte()['pseudo']) ?></span>,
-            les affaires a juger arriveront bientot ici.
+            les affaires à juger arriveront bientot ici.
         </p>
     <?php else: ?>
         <p class="text-gray-600">
