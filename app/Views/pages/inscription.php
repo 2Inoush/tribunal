@@ -75,6 +75,12 @@
         <a href="<?= url('/connexion') ?>" class="font-medium text-encre underline hover:text-dore">
             Se connecter
         </a>
+
+        <a href="<?= url('/connexion') ?>" class="font-medium text-encre underline hover:text-dore">
+            Se connecter
+        </a>
     </p>
+
+    
 
 </div>

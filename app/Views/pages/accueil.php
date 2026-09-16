@@ -14,6 +14,7 @@
         La seance est ouverte
     </h1>
 
+
     <?php if (estConnecte()): ?>
         <p class="text-gray-600">
             Bonjour <span class="font-semibold"><?= e(utilisateurConnecte()['pseudo']) ?></span>,
@@ -24,5 +25,7 @@
             Connectez-vous pour plaider votre cause et rendre la justice.
         </p>
     <?php endif; ?>
+
+    <a href="<?= url('/affaires/creer') ?>">Créer</a>
 
 </div>

@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use App\Controllers\Web\AuthController;
+use App\Controllers\Web\AffaireController;
 use App\Controllers\Web\HomeController;
 
 return [
@@ -28,9 +29,11 @@ return [
 
     'GET  /deconnexion'   => [AuthController::class, 'deconnexion'],
 
+    // ---- Affaires ----------------------------------------------------
+    'GET  /affaires/creer' => [AffaireController::class, 'formulaireCreation', 'auth'],
+    'POST /affaires'       => [AffaireController::class, 'creer',              'auth'],
+
     // ---- A venir -----------------------------------------------------
-    // 'GET  /affaires/creer'        => [AffaireController::class, 'formulaireCreation', 'auth'],
-    // 'POST /affaires'              => [AffaireController::class, 'creer',              'auth'],
     // 'GET  /affaires/{id}'         => [AffaireController::class, 'detail'],
     // 'GET  /profil'                => [ProfilController::class,  'index',              'auth'],
     // 'GET  /classement'            => [ClassementController::class, 'index'],
