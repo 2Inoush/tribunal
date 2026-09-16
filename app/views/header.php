@@ -60,27 +60,23 @@
             <nav class="flex items-center gap-3 text-sm">
                 <?php if (estConnecte()): ?>
 
-                    <a href="affaire-creer.php"
-                        class="px-3 py-1.5 rounded bg-dore text-encre font-semibold hover:bg-yellow-500">
-                        Créer une affaire
-                    </a>
-                    <span class="hidden sm:inline text-gray-300">
+                                    <a href="profil.php" class="hidden sm:inline text-gray-300 hover:text-dore">
                         <?= e(utilisateurConnecte()['pseudo']) ?>
-                    </span>
-                    <a href="deconnexion.php"
-                        class="px-3 py-1.5 rounded border border-gray-500 hover:bg-white hover:text-encre">
-                        Déconnexion
-                    </a>
+                        </a>
+                        <a href="deconnexion.php"
+                            class="px-3 py-1.5 rounded border border-gray-500 hover:bg-white hover:text-encre">
+                            Déconnexion
+                        </a>
 
-                <?php else: ?>
+                    <?php else: ?>
 
-                    <a href="connexion.php" class="hover:text-dore">Connexion</a>
-                    <a href="inscription.php"
-                        class="px-3 py-1.5 rounded bg-dore text-encre font-semibold hover:bg-yellow-500">
-                        Inscription
-                    </a>
+                        <a href="connexion.php" class="hover:text-dore">Connexion</a>
+                        <a href="inscription.php"
+                            class="px-3 py-1.5 rounded bg-dore text-encre font-semibold hover:bg-yellow-500">
+                            Inscription
+                        </a>
 
-                <?php endif; ?>
+                    <?php endif; ?>
             </nav>
 
         </div>

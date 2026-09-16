@@ -11,6 +11,9 @@
 --  Import :  mysql -u root -p < database/schema.sql
 -- =====================================================================
 
+-- Ce fichier est en UTF-8 : on le dit au client avant toute chose.
+SET NAMES utf8mb4;
+
 DROP DATABASE IF EXISTS tribunal;
 CREATE DATABASE tribunal
     CHARACTER SET utf8mb4
