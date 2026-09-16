@@ -19,16 +19,15 @@
          comme « text-center » ou « bg-white » fonctionnent tout de suite. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Nos couleurs (cahier des charges, section 5), utilisables ensuite
         // comme n'importe quelle classe Tailwind : bg-dore, text-coupable...
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         acquitte: '#16a34a',   // vert
-                        coupable: '#dc2626',   // rouge
+                        coupable: '#dc2626',   
                         dore:     '#c9a227',   // accent
-                        encre:    '#111827',   // noir du texte
+                        encre:    '#111827',   
                     },
                 },
             },
