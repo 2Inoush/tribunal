@@ -31,10 +31,30 @@ session_start();
 // Avec MAMP : MySQL ecoute sur le port 8889, login root, mot de passe root.
 // (Si vous utilisez autre chose que MAMP, changez le port et le mot de passe.)
 $hote        = '127.0.0.1';
-$port        = '3306';
+$port        = '8889';
 $nomBase     = 'tribunal';
 $identifiant = 'root';
-$motDePasse  = '';
+$motDePasse  = 'root';
+
+// ---------------------------------------------------------------------
+//  Configuration propre a chaque machine
+// ---------------------------------------------------------------------
+// Les valeurs ci-dessus sont celles de MAMP. Si votre installation est
+// differente (XAMPP, WAMP, MySQL sous Linux...), ne les changez PAS ici :
+// ce fichier est partage sur Git, et votre modification casserait le
+// projet chez les autres au prochain pull.
+//
+// Creez plutot un fichier app/config-local.php, qui n'est pas versionne :
+//
+//     <?php
+//     $port       = '3306';
+//     $motDePasse = '';
+//
+// Il est charge juste apres et remplace les valeurs par defaut.
+// Un modele est fourni : app/config-local.exemple.php
+if (file_exists(__DIR__ . '/config-local.php')) {
+    require __DIR__ . '/config-local.php';
+}
 
 try {
     $pdo = new PDO(

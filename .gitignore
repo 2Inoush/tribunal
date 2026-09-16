@@ -6,3 +6,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Configuration locale : chacun la sienne, jamais versionnee
+app/config-local.php

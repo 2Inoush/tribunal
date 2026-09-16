@@ -144,3 +144,27 @@ function supprimerAffaire(PDO $pdo, int $id): void
     $requete = $pdo->prepare('DELETE FROM affaire WHERE id = ?');
     $requete->execute([$id]);
 }
+
+
+/**
+ * Renvoie UNE affaire tiree au hasard, ou null s'il n'y en a aucune.
+ *
+ * ORDER BY RAND() melange les lignes et LIMIT 1 n'en garde qu'une.
+ * (Sur une tres grosse table ce serait lent, mais pour quelques dizaines
+ * d'affaires c'est parfait.)
+ *
+ * On lit la vue v_affaire_stats pour avoir aussi le taux de vote,
+ * qui servira a l'affichage des resultats (F6).
+ */
+function affaireAuHasard(PDO $pdo): ?array
+{
+    $requete = $pdo->query(
+        'SELECT id, titre, description, argument_1, argument_2,
+                total_votes, pct_acquitte, pct_coupable
+         FROM v_affaire_stats
+         ORDER BY RAND()
+         LIMIT 1'
+    );
+
+    return $requete->fetch() ?: null;
+}
