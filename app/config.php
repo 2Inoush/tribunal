@@ -31,10 +31,17 @@ session_start();
 // Avec MAMP : MySQL ecoute sur le port 8889, login root, mot de passe root.
 // (Si vous utilisez autre chose que MAMP, changez le port et le mot de passe.)
 $hote        = '127.0.0.1';
-$port        = '8889';
+$port        = '3306';
 $nomBase     = 'tribunal';
 $identifiant = 'root';
-$motDePasse  = 'root';
+$motDePasse  = '';
+
+$hote = '127.0.0.1';
+$port = '3306';
+$dbname = 'tribunal';
+$mot_de_passe = '';
+
+
 
 try {
     $pdo = new PDO(
