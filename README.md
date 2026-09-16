@@ -33,6 +33,7 @@ tribunal/
 │   ├── inscription.php
 │   ├── connexion.php
 │   ├── deconnexion.php
+│   ├── affaire-creer.php
 │   └── images/
 │
 ├── app/                 ← LE CODE (le navigateur n'y accède jamais)
@@ -43,17 +44,20 @@ tribunal/
 │   │   ├── accueil.php
 │   │   ├── inscription.php
 │   │   ├── connexion.php
-│   │   └── deconnexion.php
+│   │   ├── deconnexion.php
+│   │   └── affaire-creer.php
 │   │
 │   ├── models/              M — les requêtes SQL
-│   │   └── utilisateur.php
+│   │   ├── utilisateur.php
+│   │   └── affaire.php
 │   │
 │   └── views/               V — le HTML
 │       ├── header.php       haut de page (commun)
 │       ├── footer.php       bas de page (commun)
 │       ├── accueil.php
 │       ├── inscription.php
-│       └── connexion.php
+│       ├── connexion.php
+│       └── affaire-creer.php
 │
 ├── database/
 │   ├── schema.sql           structure des tables + vues
@@ -114,7 +118,7 @@ Navigateur  →  public/connexion.php  →  app/controllers/connexion.php
 | #  | Fonctionnalité | État |
 |----|----------------|------|
 | F1 | Inscription et connexion | ✅ fait |
-| F2 | Créer une affaire | à faire |
+| F2 | Créer une affaire | ✅ fait |
 | F3 | Modifier une affaire (tant qu'aucun vote) | à faire |
 | F4 | Supprimer une affaire | à faire |
 | F5 | Voter (Acquitté / Coupable) | à faire |

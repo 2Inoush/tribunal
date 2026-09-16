@@ -52,6 +52,10 @@
             <nav class="flex items-center gap-3 text-sm">
                 <?php if (estConnecte()): ?>
 
+                    <a href="affaire-creer.php"
+                       class="px-3 py-1.5 rounded bg-dore text-encre font-semibold hover:bg-yellow-500">
+                        Créer une affaire
+                    </a>
                     <span class="hidden sm:inline text-gray-300">
                         <?= e(utilisateurConnecte()['pseudo']) ?>
                     </span>
@@ -86,4 +90,14 @@
                 <?= e($_SESSION['message']) ?>
             </div>
             <?php unset($_SESSION['message']); ?>
+        <?php endif; ?>
+
+        <?php
+        // Meme chose pour les messages d'erreur, affiches en rouge.
+        if (isset($_SESSION['erreur'])):
+        ?>
+            <div class="mb-6 rounded border-l-4 border-coupable bg-red-50 px-4 py-3 text-sm text-red-800">
+                <?= e($_SESSION['erreur']) ?>
+            </div>
+            <?php unset($_SESSION['erreur']); ?>
         <?php endif; ?>
