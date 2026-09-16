@@ -39,7 +39,7 @@ vote        (id, #id_utilisateur, #id_affaire, choix, date_vote)
 ### `v_affaire_stats`
 Une ligne par affaire, avec `total_votes`, `votes_acquitte`, `votes_coupable`,
 `pct_acquitte`, `pct_coupable` et `modifiable` (vrai tant qu'aucun vote n'est déposé).
-Alimente l'accueil (F6) et conditionne l'affichage du bouton « Modifier » (F3).
+Alimentera l'accueil (F6) et conditionnera l'affichage du bouton « Modifier » (F3).
 
 ### `v_classement_jures`
 Classement par `score_reputation` (`nb_votes + nb_affaires × 5`).

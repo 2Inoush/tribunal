@@ -1,0 +1,4 @@
+# Ce dossier contient le code du site (config, modeles, vues).
+# Le navigateur n'a aucune raison de l'ouvrir directement : seules les
+# pages de public/ l'utilisent, avec require. On bloque donc l'acces.
+Require all denied
