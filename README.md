@@ -34,6 +34,9 @@ tribunal/
 │   ├── connexion.php
 │   ├── deconnexion.php
 │   ├── affaire-creer.php
+│   ├── affaire-modifier.php
+│   ├── affaire-supprimer.php
+│   ├── profil.php
 │   └── images/
 │
 ├── app/                 ← LE CODE (le navigateur n'y accède jamais)
@@ -45,7 +48,10 @@ tribunal/
 │   │   ├── inscription.php
 │   │   ├── connexion.php
 │   │   ├── deconnexion.php
-│   │   └── affaire-creer.php
+│   │   ├── affaire-creer.php
+│   │   ├── affaire-modifier.php
+│   │   ├── affaire-supprimer.php
+│   │   └── profil.php
 │   │
 │   ├── models/              M — les requêtes SQL
 │   │   ├── utilisateur.php
@@ -57,7 +63,9 @@ tribunal/
 │       ├── accueil.php
 │       ├── inscription.php
 │       ├── connexion.php
-│       └── affaire-creer.php
+│       ├── affaire-creer.php
+│       ├── affaire-modifier.php
+│       └── profil.php
 │
 ├── database/
 │   ├── schema.sql           structure des tables + vues
@@ -119,12 +127,12 @@ Navigateur  →  public/connexion.php  →  app/controllers/connexion.php
 |----|----------------|------|
 | F1 | Inscription et connexion | ✅ fait |
 | F2 | Créer une affaire | ✅ fait |
-| F3 | Modifier une affaire (tant qu'aucun vote) | à faire |
-| F4 | Supprimer une affaire | à faire |
+| F3 | Modifier une affaire (tant qu'aucun vote) | 🟡 vue + SQL prêts, contrôleur à écrire (Ines) |
+| F4 | Supprimer une affaire | ✅ fait |
 | F5 | Voter (Acquitté / Coupable) | à faire |
 | F6 | Résultats du vote en direct | à faire |
 | F7 | Récompenses | à faire |
-| F8 | Profil et historique *(bonus)* | à faire |
+| F8 | Profil et historique *(bonus)* | 🟡 page faite, historique des votes à venir |
 | F9 | Classement des jurés *(bonus)* | à faire |
 
 ## Sécurité

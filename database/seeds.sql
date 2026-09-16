@@ -9,6 +9,12 @@
 
 USE tribunal;
 
+-- Indique au client MySQL que ce fichier est en UTF-8.
+-- Sans cette ligne, phpMyAdmin (ou la ligne de commande) peut annoncer une
+-- connexion en latin1 : les accents sont alors encodes une seconde fois et
+-- « derniere » se retrouve stocke en « derniÃ¨re » dans la base.
+SET NAMES utf8mb4;
+
 -- Remise a zero.
 -- On utilise DELETE et non TRUNCATE : MySQL refuse de tronquer une table
 -- referencee par une cle etrangere (erreur 1701), et l'onglet SQL de

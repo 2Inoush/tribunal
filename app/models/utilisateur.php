@@ -31,6 +31,20 @@ function trouverUtilisateurParEmail(PDO $pdo, string $email): ?array
 }
 
 
+/**
+ * Cherche un utilisateur a partir de son identifiant.
+ * Sert a la page profil : la session ne garde que l'id et le pseudo,
+ * on relit donc la base pour avoir l'email et la date d'inscription.
+ */
+function trouverUtilisateurParId(PDO $pdo, int $id): ?array
+{
+    $requete = $pdo->prepare('SELECT * FROM utilisateur WHERE id = ?');
+    $requete->execute([$id]);
+
+    return $requete->fetch() ?: null;
+}
+
+
 /** Est-ce que cet email est deja pris ? */
 function emailDejaUtilise(PDO $pdo, string $email): bool
 {
