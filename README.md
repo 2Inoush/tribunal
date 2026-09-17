@@ -37,6 +37,7 @@ tribunal/
 │   ├── affaire-modifier.php
 │   ├── affaire-supprimer.php
 │   ├── profil.php
+│   ├── classement.php
 │   └── images/
 │
 ├── app/                 ← LE CODE (le navigateur n'y accède jamais)
@@ -51,7 +52,8 @@ tribunal/
 │   │   ├── affaire-creer.php
 │   │   ├── affaire-modifier.php
 │   │   ├── affaire-supprimer.php
-│   │   └── profil.php
+│   │   ├── profil.php
+│   │   └── classement.php
 │   │
 │   ├── models/              M — les requêtes SQL
 │   │   ├── utilisateur.php
@@ -65,7 +67,8 @@ tribunal/
 │       ├── connexion.php
 │       ├── affaire-creer.php
 │       ├── affaire-modifier.php
-│       └── profil.php
+│       ├── profil.php
+│       └── classement.php
 │
 ├── database/
 │   ├── schema.sql           structure des tables + vues
@@ -133,7 +136,7 @@ Navigateur  →  public/connexion.php  →  app/controllers/connexion.php
 | F6 | Résultats du vote en direct | à faire |
 | F7 | Récompenses | à faire |
 | F8 | Profil et historique *(bonus)* | 🟡 page faite, historique des votes à venir |
-| F9 | Classement des jurés *(bonus)* | à faire |
+| F9 | Classement des jurés *(bonus)* | ✅ fait |
 
 ## Sécurité
 
