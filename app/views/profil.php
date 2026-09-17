@@ -88,7 +88,7 @@
                             ?>
                             <?php if ((int) $conflit['modifiable'] === 1): ?>
                                 <a href="affaire-modifier.php?id=<?= (int) $conflit['id'] ?>"
-                                   class="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50">
+                                   class="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50 btn-modifier">
                                     Modifier
                                 </a>
                             <?php else: ?>
