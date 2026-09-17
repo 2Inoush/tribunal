@@ -5,7 +5,7 @@
  * Mise en page ecrite par Enora.s
  */
 
-
+//envoi des données de l'affaire à juger → acquitte ou coupable dans tab vote en fonction de l'id user et id affaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_affaire'])) {
 
     $idUtilisateur = (int) $_SESSION['utilisateur']['id'];
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_a
         die('Choix invalide.');
     }
 
-    
+    //verification si l'utilisateur a déjà voté pour cette affaire
     $verification = $pdo->prepare(
         "SELECT id
          FROM vote
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_a
     $messageVote = " $choix enregistré";
 }
 
-
+//affichage ds infos bdd dans card dans ordre indefini + limite le vote à 1 par user sur chaque affaire
 $stmt = $pdo->prepare(
     "SELECT a.id, a.titre, a.description, a.argument_1, a.argument_2
      FROM affaire a
@@ -84,7 +84,7 @@ $affaire = $stmt->fetch();
 
 <div class=" py-2 lg:py-12">
     <p class="text-5xl mb-4 text-center" aria-hidden="true">&#9878;</p>
-
+    <!--si l'user est connecté, il a accès à la carte de l'affaire à juger, sinon il est invité à se connecter pour plaider sa cause-->
     <?php if (estConnecte()): ?>
         
         <?php if (isset($messageVote)): ?>
@@ -92,7 +92,7 @@ $affaire = $stmt->fetch();
                 <?= htmlspecialchars($messageVote, ENT_QUOTES, 'UTF-8') ?>
             </p>
         <?php endif; ?>
-
+        <!-- si il y a des affaires, on les affiche, sinon message -->
         <?php if ($affaire): ?>
             <div class="rounded-lg shadow-md bg-white p-6">
                 <h2 class="text-xl font-bold mb-2">
@@ -100,8 +100,6 @@ $affaire = $stmt->fetch();
                 </h2>
                 <p class="text-gray-600">
                     <?= (e($affaire['description'])) ?>
-                    <br>
-                    <?= e($affaire['id']) ?>
                 </p>
                 <div class="w-full  ">
                     <details class="group">
@@ -127,19 +125,19 @@ $affaire = $stmt->fetch();
                 
                 
 
-                <form method="POST">
+                <form method="POST" class="flex justify-center gap-2 sm:gap-10 mt-6">
                     <input
                         type="hidden"
                         name="id_affaire"
                         value="<?= (int) $affaire['id'] ?>"
                     >
                     <a href="">
-                        <button type="submit" name="choix" value="acquitte" class="text-white rounded-lg shadow-md bg-green-400 px-8 py-4  hover:bg-acquitte  font-medium  text-sm  text-center leading-5">
+                        <button type="submit" name="choix" value="acquitte" class="text-white rounded-lg shadow-md bg-green-400 px-8 sm:px-12 py-4  hover:bg-acquitte  font-medium  text-sm  text-center ">
                             Acquitté
                         </button>
                     </a>
                     <a href="">
-                        <button type="submit" name="choix" value="coupable" class="text-white rounded-lg shadow-md bg-red-400 px-8 py-4  hover:bg-coupable  font-medium  text-sm  text-center leading-5">
+                        <button type="submit" name="choix" value="coupable" class="text-white rounded-lg shadow-md bg-red-400 px-8 sm:px-12 py-4  hover:bg-coupable  font-medium  text-sm  text-center ">
                             Coupable
                         </button>
                     </a>
