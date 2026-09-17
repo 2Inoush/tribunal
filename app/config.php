@@ -34,10 +34,10 @@ $modeDeveloppement = true;
 
 // Base de donnees — valeurs par defaut : MAMP.
 $hote        = '127.0.0.1';
-$port        = '8889';
+$port        = '3306';
 $nomBase     = 'tribunal';
 $identifiant = 'root';
-$motDePasse  = 'root';
+$motDePasse  = '';
 
 
 // ---- Reglages propres a la machine (fichier non versionne) ----------
