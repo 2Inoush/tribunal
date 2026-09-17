@@ -58,6 +58,9 @@
             </a>
 
             <nav class="flex items-center gap-3 text-sm">
+
+                <a href="classement.php" class="hover:text-dore">Classement</a>
+
                 <?php if (estConnecte()): ?>
 
                                     <a href="profil.php" class="hidden sm:inline text-gray-300 hover:text-dore">

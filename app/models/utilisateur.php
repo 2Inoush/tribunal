@@ -110,3 +110,33 @@ function verifierIdentifiants(PDO $pdo, string $email, string $motDePasse): ?arr
 
     return $utilisateur;
 }
+
+
+/**
+ * Renvoie le classement COMPLET des jures (fonctionnalite F9).
+ *
+ * On lit la vue `v_classement_jures` (voir database/schema.sql) : elle
+ * compte deja, pour chaque utilisateur, ses votes et ses affaires.
+ *
+ * Le tri suit le cahier des charges : d'abord le nombre de votes.
+ * Les trois criteres servent a departager les ex aequo :
+ *   1. le plus de votes
+ *   2. puis le plus d'affaires deposees
+ *   3. puis le compte le plus ancien
+ * Sans cela, deux jures a egalite changeraient de place a chaque
+ * rechargement de la page.
+ *
+ * La fonction renvoie TOUT le monde : c'est le controleur qui garde
+ * les dix premiers ou filtre selon la recherche. Comme cela, on peut
+ * connaitre le rang reel d'un juré meme s'il est 42e.
+ */
+function classementJures(PDO $pdo): array
+{
+    $requete = $pdo->query(
+        'SELECT id, pseudo, nb_votes, nb_affaires
+         FROM v_classement_jures
+         ORDER BY nb_votes DESC, nb_affaires DESC, date_creation ASC'
+    );
+
+    return $requete->fetchAll();
+}
