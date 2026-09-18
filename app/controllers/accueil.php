@@ -2,12 +2,15 @@
 /**
  * CONTROLEUR : accueil
  *
- * Deux roles :
+ * Trois roles :
  *   1. enregistrer le vote quand on clique sur Acquitté ou Coupable (F5)
- *   2. tirer une affaire au hasard et la passer a la vue (F6)
+ *   2. afficher le taux de vote de l'affaire qu'on vient de juger  (F6)
+ *   3. sinon, tirer une affaire a juger
  *
- * Le traitement du vote a ete ecrit par Enora dans la vue ; il est
- * remonte ici, ou est sa place : une vue ne fait qu'afficher.
+ * Le parcours du cahier des charges :
+ *   « il vote, le taux de vote s'affiche aussitot, puis il passe a
+ *     l'affaire suivante. »
+ * D'ou l'enchainement : vote -> resultats -> affaire suivante.
  */
 
 require_once __DIR__ . '/../models/affaire.php';
@@ -17,13 +20,10 @@ require_once __DIR__ . '/../models/vote.php';
 // =====================================================================
 //  1. TRAITEMENT DU VOTE  (F5)
 // =====================================================================
-// On arrive ici quand le formulaire de la carte a ete envoye.
-// isset() verifie que les deux champs attendus sont bien presents.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_affaire'])) {
 
     // ---- Il faut etre connecte pour voter ----
-    // Erreur prevue par le cahier des charges : « vote sans etre connecte ».
     if (!estConnecte()) {
         $_SESSION['erreur'] = 'Vous devez être connecté pour voter.';
         header('Location: connexion.php');
@@ -35,8 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_a
     $choix         = $_POST['choix'];
 
     // ---- Le choix doit etre l'une des deux valeurs attendues ----
-    // Le troisieme argument (true) de in_array impose une comparaison
-    // stricte, qui compare aussi le type.
     if (!in_array($choix, ['acquitte', 'coupable'], true)) {
         $_SESSION['erreur'] = 'Choix de vote invalide.';
         header('Location: index.php');
@@ -44,9 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_a
     }
 
     // ---- Un seul vote par affaire ----
-    // Erreur prevue par le cahier des charges : « double vote sur la
-    // meme affaire ». Sans ce test, la contrainte UNIQUE de la base
-    // ferait planter la page avec une erreur SQL.
+    // Sans ce test, la contrainte UNIQUE de la base ferait planter la
+    // page avec une erreur SQL.
     if (aDejaVote($pdo, $idUtilisateur, $idAffaire)) {
         $_SESSION['erreur'] = 'Vous avez déjà rendu votre verdict sur cette affaire.';
         header('Location: index.php');
@@ -55,25 +52,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['choix'], $_POST['id_a
 
     enregistrerVote($pdo, $idUtilisateur, $idAffaire, $choix);
 
-    $_SESSION['message'] = $choix === 'acquitte'
-        ? 'Verdict rendu : acquitté.'
-        : 'Verdict rendu : coupable.';
-
-    // On redirige au lieu d'afficher directement la page : sans cela,
-    // recharger la page renverrait le formulaire et tenterait un
-    // deuxieme vote. C'est aussi ce qui fait apparaitre l'affaire suivante.
-    header('Location: index.php');
+    // On repart sur la meme page, mais en demandant l'affichage des
+    // resultats de l'affaire qu'on vient de juger.
+    //
+    // Pourquoi rediriger plutot qu'afficher directement ? Parce que sans
+    // cela, recharger la page renverrait le formulaire et tenterait un
+    // second vote. L'adresse obtenue est aussi rechargeable et partageable.
+    header('Location: index.php?resultat=' . $idAffaire);
     exit;
 }
 
 
 // =====================================================================
-//  2. L'AFFAIRE A JUGER
+//  2. AFFICHAGE DU TAUX DE VOTE  (F6)
 // =====================================================================
-// Peut valoir null si la base ne contient aucune affaire :
-// la vue previent alors l'utilisateur, ce n'est pas une erreur.
+// On arrive ici avec index.php?resultat=12 juste apres un vote.
+// $resultats reste null le reste du temps.
 
-$affaire = affaireAuHasard($pdo);
+$resultats = null;
+$monChoix  = null;
+
+if (isset($_GET['resultat']) && estConnecte()) {
+
+    $idAffaire = (int) $_GET['resultat'];
+
+    // trouverAffaire() lit la vue v_affaire_stats : les pourcentages
+    // sont donc deja calcules par MySQL, il n'y a rien a recalculer ici.
+    $resultats = trouverAffaire($pdo, $idAffaire);
+
+    // Son propre verdict, pour le lui rappeler sous la jauge.
+    $monChoix = voteDeUtilisateur($pdo, (int) utilisateurConnecte()['id'], $idAffaire);
+}
+
+
+// =====================================================================
+//  3. L'AFFAIRE A JUGER
+// =====================================================================
+// Inutile de tirer une affaire si l'on affiche des resultats.
+// Vaut null quand il n'y a plus rien a juger : la vue le signale.
+
+$affaire = null;
+
+if ($resultats === null && estConnecte()) {
+    $affaire = affaireAJuger($pdo, (int) utilisateurConnecte()['id']);
+}
 
 $titre = 'Accueil';
 

@@ -41,3 +41,23 @@ function enregistrerVote(PDO $pdo, int $idUtilisateur, int $idAffaire, string $c
 
     $requete->execute([$idUtilisateur, $idAffaire, $choix]);
 }
+
+
+/**
+ * Qu'a vote ce juré sur cette affaire ?
+ *
+ * Renvoie « acquitte », « coupable », ou null s'il n'a pas encore vote.
+ * Sert a lui rappeler son propre verdict sous la jauge des resultats.
+ */
+function voteDeUtilisateur(PDO $pdo, int $idUtilisateur, int $idAffaire): ?string
+{
+    $requete = $pdo->prepare(
+        'SELECT choix FROM vote WHERE id_utilisateur = ? AND id_affaire = ?'
+    );
+
+    $requete->execute([$idUtilisateur, $idAffaire]);
+
+    // fetchColumn() renvoie directement la valeur de la colonne,
+    // ou false s'il n'y a pas de ligne.
+    return $requete->fetchColumn() ?: null;
+}

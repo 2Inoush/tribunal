@@ -115,7 +115,39 @@ try {
 
 
 // =====================================================================
-//  5. PETITES FONCTIONS UTILES
+//  5. LA SESSION POINTE-T-ELLE ENCORE SUR UN COMPTE EXISTANT ?
+// =====================================================================
+// Un cookie de session vit plusieurs jours. Pendant ce temps, le compte
+// qu'il designe peut avoir disparu : compte supprime, ou base reimportee
+// pendant les tests.
+//
+// Sans cette verification, la session reste « connectee » avec un
+// identifiant qui ne correspond a plus rien. Au premier vote, MySQL
+// refuse alors la ligne (la cle etrangere de `vote` exige un utilisateur
+// existant) et la page plante avec une erreur 1452.
+//
+// On verifie donc une fois par page, et on ferme la session si le compte
+// n'existe plus : l'utilisateur est simplement invite a se reconnecter.
+
+require_once __DIR__ . '/models/utilisateur.php';
+
+if (isset($_SESSION['utilisateur']['id'])) {
+
+    $compteExiste = trouverUtilisateurParId($pdo, (int) $_SESSION['utilisateur']['id']);
+
+    if ($compteExiste === null) {
+        $_SESSION = [];
+        session_destroy();
+
+        // On rouvre une session vide, pour pouvoir afficher le message.
+        session_start();
+        $_SESSION['erreur'] = 'Votre session a expiré, merci de vous reconnecter.';
+    }
+}
+
+
+// =====================================================================
+//  6. PETITES FONCTIONS UTILES
 // =====================================================================
 
 /**

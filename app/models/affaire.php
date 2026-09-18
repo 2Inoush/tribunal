@@ -85,7 +85,8 @@ function trouverAffaire(PDO $pdo, int $id): ?array
     $requete = $pdo->prepare(
         'SELECT id, id_utilisateur, auteur, titre, description,
                 argument_1, argument_2, date_creation, date_modification,
-                total_votes, pct_acquitte, pct_coupable, modifiable
+                total_votes, votes_acquitte, votes_coupable,
+                pct_acquitte, pct_coupable, modifiable
          FROM v_affaire_stats
          WHERE id = ?'
     );
@@ -147,24 +148,35 @@ function supprimerAffaire(PDO $pdo, int $id): void
 
 
 /**
- * Renvoie UNE affaire tiree au hasard, ou null s'il n'y en a aucune.
+ * Renvoie UNE affaire que ce juré n'a pas encore jugée, au hasard.
+ * Renvoie null quand il a vote sur toutes les affaires.
+ *
+ * Le NOT EXISTS ecarte les affaires pour lesquelles il existe deja un
+ * vote de cet utilisateur : inutile de lui reproposer une affaire sur
+ * laquelle il s'est deja prononce, il ne pourrait pas voter deux fois.
  *
  * ORDER BY RAND() melange les lignes et LIMIT 1 n'en garde qu'une.
- * (Sur une tres grosse table ce serait lent, mais pour quelques dizaines
+ * (Ce serait lent sur des millions de lignes ; pour quelques dizaines
  * d'affaires c'est parfait.)
  *
- * On lit la vue v_affaire_stats pour avoir aussi le taux de vote,
- * qui servira a l'affichage des resultats (F6).
+ * Requete ecrite par Enora, remontee ici depuis la vue.
  */
-function affaireAuHasard(PDO $pdo): ?array
+function affaireAJuger(PDO $pdo, int $idUtilisateur): ?array
 {
-    $requete = $pdo->query(
-        'SELECT id, titre, description, argument_1, argument_2,
-                total_votes, pct_acquitte, pct_coupable
-         FROM v_affaire_stats
+    $requete = $pdo->prepare(
+        'SELECT id, titre, description, argument_1, argument_2
+         FROM affaire a
+         WHERE NOT EXISTS (
+             SELECT 1
+             FROM vote v
+             WHERE v.id_affaire = a.id
+               AND v.id_utilisateur = ?
+         )
          ORDER BY RAND()
          LIMIT 1'
     );
+
+    $requete->execute([$idUtilisateur]);
 
     return $requete->fetch() ?: null;
 }
