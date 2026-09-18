@@ -2,9 +2,12 @@
 
     </main>
 
-    <footer class="border-t border-gray-200 bg-white">
-        <div class="max-w-4xl mx-auto px-4 py-6 text-center text-xs text-gray-500">
-            Le Tribunal des Disputes Minuscules — projet d'école, <?= date('Y') ?>
+    <footer class="border-t border-trait bg-blanc">
+        <div class="mx-auto flex max-w-5xl flex-col items-center gap-1 px-4 py-7 text-center">
+            <p class="etiquette">Le Tribunal des Disputes Minuscules</p>
+            <p class="text-xs text-encre-pale">
+                Projet d'école — Ines, Enora, Matéo · <?= date('Y') ?>
+            </p>
         </div>
     </footer>
 

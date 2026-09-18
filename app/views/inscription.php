@@ -1,80 +1,79 @@
 <?php
 /**
- * VUE : formulaire d'inscription.
+ * VUE : formulaire d'inscription (F1).
  *
- * La page inscription.php a prepare :
- *   $erreurs -> ['pseudo' => 'message', ...]  (vide s'il n'y a pas d'erreur)
- *   $pseudo, $email -> ce qui a deja ete tape, pour ne pas le retaper
- *
- * isset($erreurs['pseudo']) veut dire : « y a-t-il une erreur sur ce champ ? »
+ * $erreurs : ['nom_du_champ' => 'message'] apres une tentative ratee
+ * $pseudo, $email : ce qui a deja ete tape (jamais le mot de passe)
  */
 ?>
 
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
+<div class="mx-auto max-w-md">
 
-    <h1 class="text-2xl font-bold mb-1" style="font-family: Georgia, serif;">Prêter serment</h1>
-    <p class="text-sm text-gray-600 mb-6">
-        Créez votre compte pour plaider et rendre la justice.
-    </p>
+    <div class="mb-7 text-center">
+        <p class="etiquette mb-2">Nouveau juré</p>
+        <h1 class="titre text-3xl">Prêter serment</h1>
+        <p class="mt-2 text-sm texte-doux">
+            Pour plaider vos causes et rendre la justice.
+        </p>
+    </div>
 
-    <!-- action="" : le formulaire s'envoie sur cette meme page -->
-    <form method="post" action="" class="space-y-4" novalidate>
+    <div class="carte p-6 sm:p-8">
 
-        <div>
-            <label for="pseudo" class="block text-sm font-medium mb-1">Pseudo</label>
-            <input type="text" id="pseudo" name="pseudo" value="<?= e($pseudo) ?>"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['pseudo']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['pseudo'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['pseudo']) ?></p>
-            <?php endif; ?>
-        </div>
+        <form method="post" action="" class="space-y-4" novalidate>
 
-        <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email</label>
-            <input type="email" id="email" name="email" value="<?= e($email) ?>"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['email']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['email'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['email']) ?></p>
-            <?php endif; ?>
-        </div>
+            <div>
+                <label for="pseudo" class="etiquette-champ">Pseudo</label>
+                <input type="text" id="pseudo" name="pseudo" value="<?= e($pseudo) ?>"
+                       class="champ <?= isset($erreurs['pseudo']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['pseudo'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['pseudo']) ?></p>
+                <?php endif; ?>
+            </div>
 
-        <div>
-            <label for="mot_de_passe" class="block text-sm font-medium mb-1">Mot de passe</label>
-            <!-- On ne remet jamais le mot de passe dans le champ : il faut le retaper. -->
-            <input type="password" id="mot_de_passe" name="mot_de_passe"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['mot_de_passe']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['mot_de_passe'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['mot_de_passe']) ?></p>
-            <?php else: ?>
-                <p class="mt-1 text-xs text-gray-500">8 caractères minimum.</p>
-            <?php endif; ?>
-        </div>
+            <div>
+                <label for="email" class="etiquette-champ">Email</label>
+                <input type="email" id="email" name="email" value="<?= e($email) ?>"
+                       class="champ <?= isset($erreurs['email']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['email'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['email']) ?></p>
+                <?php endif; ?>
+            </div>
 
-        <div>
-            <label for="mot_de_passe_confirmation" class="block text-sm font-medium mb-1">
-                Confirmation du mot de passe
-            </label>
-            <input type="password" id="mot_de_passe_confirmation" name="mot_de_passe_confirmation"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['mot_de_passe_confirmation']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['mot_de_passe_confirmation'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['mot_de_passe_confirmation']) ?></p>
-            <?php endif; ?>
-        </div>
+            <div>
+                <label for="mot_de_passe" class="etiquette-champ">Mot de passe</label>
+                <!-- On ne remet jamais le mot de passe dans le champ. -->
+                <input type="password" id="mot_de_passe" name="mot_de_passe"
+                       class="champ <?= isset($erreurs['mot_de_passe']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['mot_de_passe'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['mot_de_passe']) ?></p>
+                <?php else: ?>
+                    <p class="mt-1.5 text-xs text-encre-pale">8 caractères minimum.</p>
+                <?php endif; ?>
+            </div>
 
-        <button type="submit"
-                class="w-full rounded bg-dore py-2.5 font-semibold text-encre hover:bg-yellow-500">
-            Créer mon compte
-        </button>
+            <div>
+                <label for="mot_de_passe_confirmation" class="etiquette-champ">
+                    Confirmation
+                </label>
+                <input type="password" id="mot_de_passe_confirmation"
+                       name="mot_de_passe_confirmation"
+                       class="champ <?= isset($erreurs['mot_de_passe_confirmation']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['mot_de_passe_confirmation'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['mot_de_passe_confirmation']) ?></p>
+                <?php endif; ?>
+            </div>
 
-    </form>
+            <button type="submit" class="bouton bouton-or w-full">
+                Créer mon compte
+            </button>
 
-    <p class="mt-6 text-center text-sm text-gray-600">
-        Déjà inscrit ?
-        <a href="connexion.php" class="font-medium underline hover:text-dore">Se connecter</a>
+        </form>
+
+    </div>
+
+    <p class="mt-5 text-center text-sm texte-doux">
+        Déjà juré ?
+        <a href="connexion.php" class="font-semibold text-or hover:underline">Se connecter</a>
     </p>
 
 </div>

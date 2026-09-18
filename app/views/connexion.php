@@ -1,50 +1,50 @@
 <?php
 /**
- * VUE : formulaire de connexion.
- *
- * La page connexion.php a prepare $erreurs et $email.
+ * VUE : formulaire de connexion (F1).
+ * Le controleur a prepare $erreurs et $email.
  */
 ?>
 
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
+<div class="mx-auto max-w-md">
 
-    <h1 class="text-2xl font-bold mb-1" style="font-family: Georgia, serif;">Entrer au tribunal</h1>
-    <p class="text-sm text-gray-600 mb-6">
-        Connectez-vous pour voter et défendre vos causes.
-    </p>
+    <div class="mb-7 text-center">
+        <p class="etiquette mb-2">Accès au prétoire</p>
+        <h1 class="titre text-3xl">Entrer au tribunal</h1>
+    </div>
 
-    <form method="post" action="" class="space-y-4" novalidate>
+    <div class="carte p-6 sm:p-8">
 
-        <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email</label>
-            <input type="email" id="email" name="email" value="<?= e($email) ?>"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['email']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['email'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['email']) ?></p>
-            <?php endif; ?>
-        </div>
+        <form method="post" action="" class="space-y-4" novalidate>
 
-        <div>
-            <label for="mot_de_passe" class="block text-sm font-medium mb-1">Mot de passe</label>
-            <input type="password" id="mot_de_passe" name="mot_de_passe"
-                   class="w-full rounded border px-3 py-2
-                          <?= isset($erreurs['mot_de_passe']) ? 'border-coupable' : 'border-gray-300' ?>">
-            <?php if (isset($erreurs['mot_de_passe'])): ?>
-                <p class="mt-1 text-sm text-coupable"><?= e($erreurs['mot_de_passe']) ?></p>
-            <?php endif; ?>
-        </div>
+            <div>
+                <label for="email" class="etiquette-champ">Email</label>
+                <input type="email" id="email" name="email" value="<?= e($email) ?>"
+                       class="champ <?= isset($erreurs['email']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['email'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['email']) ?></p>
+                <?php endif; ?>
+            </div>
 
-        <button type="submit"
-                class="w-full rounded bg-encre py-2.5 font-semibold text-white hover:bg-gray-800">
-            Se connecter
-        </button>
+            <div>
+                <label for="mot_de_passe" class="etiquette-champ">Mot de passe</label>
+                <input type="password" id="mot_de_passe" name="mot_de_passe"
+                       class="champ <?= isset($erreurs['mot_de_passe']) ? 'champ-errone' : '' ?>">
+                <?php if (isset($erreurs['mot_de_passe'])): ?>
+                    <p class="message-erreur"><?= e($erreurs['mot_de_passe']) ?></p>
+                <?php endif; ?>
+            </div>
 
-    </form>
+            <button type="submit" class="bouton bouton-encre w-full">
+                Se connecter
+            </button>
 
-    <p class="mt-6 text-center text-sm text-gray-600">
-        Pas encore de compte ?
-        <a href="inscription.php" class="font-medium underline hover:text-dore">S'inscrire</a>
+        </form>
+
+    </div>
+
+    <p class="mt-5 text-center text-sm texte-doux">
+        Pas encore juré ?
+        <a href="inscription.php" class="font-semibold text-or hover:underline">Prêter serment</a>
     </p>
 
 </div>

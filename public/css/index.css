@@ -1,5 +1,298 @@
-.rammetto-one-regular {
-    font-family: "Rammetto One", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+/* =====================================================================
+   LE TRIBUNAL DES DISPUTES MINUSCULES
+   Direction artistique — « le dossier judiciaire »
+
+   L'idee : detourner les codes du document officiel (papier creme,
+   encre profonde, filets, petites capitales, or grave) et les appliquer
+   a des sujets derisoires. Le contraste entre la solennite de la forme
+   et la betise du fond, c'est tout le projet.
+
+   Organisation du fichier :
+     1. La palette et les polices   (toutes les couleurs sont ici)
+     2. Les fondations              (corps de page, titres, liens)
+     3. Les composants              (cartes, boutons, champs, etiquettes)
+     4. Le bandeau du haut
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. LA PALETTE ET LES POLICES
+   Tout se regle ici : changer une valeur la change partout dans le site.
+   ===================================================================== */
+
+:root {
+    /* --- Les fonds --- */
+    --papier:        #f7f4ee;   /* creme : le fond de toutes les pages   */
+    --papier-fonce:  #efeae0;   /* creme plus soutenu : zones en retrait */
+    --blanc:         #fffefb;   /* le blanc des cartes, legerement chaud */
+
+    /* --- L'encre --- */
+    --encre:         #17212e;   /* bleu-noir : titres et texte principal */
+    --encre-douce:   #5c6672;   /* gris-bleu : texte secondaire          */
+    --encre-pale:    #9aa3ad;   /* gris clair : mentions, placeholders   */
+
+    /* --- Les accents --- */
+    --or:            #b8901f;   /* l'or du tribunal, en touches rares    */
+    --or-clair:      #e0bb4e;
+    --or-voile:      rgba(184, 144, 31, .12);
+
+    /* --- Les verdicts (cahier des charges, section 5) --- */
+    --acquitte:      #16794a;   /* vert  : acquitte                      */
+    --acquitte-pale: #e7f3ec;
+    --coupable:      #b3261e;   /* rouge : coupable                      */
+    --coupable-pale: #fbeae8;
+
+    /* --- Les traits --- */
+    --trait:         #e2dcd0;   /* bordures et separateurs               */
+
+    /* --- Les polices --- */
+    --titres: "Fraunces", Georgia, serif;          /* serif a caractere  */
+    --texte:  "Inter", system-ui, sans-serif;      /* sans-serif nette   */
+    --sigle:  "Rammetto One", sans-serif;          /* le logo TDM        */
+}
+
+
+/* =====================================================================
+   2. LES FONDATIONS
+   ===================================================================== */
+
+body {
+    background: var(--papier);
+    color: var(--encre);
+    font-family: var(--texte);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Les titres : la serif, resserree, avec un vrai contraste de taille
+   par rapport au texte courant. C'est ce qui donne du rythme a la page. */
+.titre {
+    font-family: var(--titres);
+    font-weight: 600;
+    letter-spacing: -.015em;
+    color: var(--encre);
+}
+
+/* La petite etiquette en capitales espacees qui coiffe une section :
+   « VERDICT DU PEUPLE », « PIECE N° 12 »... */
+.etiquette {
+    font-family: var(--texte);
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--encre-pale);
+}
+
+.texte-doux { color: var(--encre-douce); }
+
+.sigle { font-family: var(--sigle); }
+
+
+/* =====================================================================
+   3. LES COMPOSANTS
+   ===================================================================== */
+
+/* --- La carte : le contenant de base, present sur toutes les pages ---
+   Un blanc chaud, un trait fin, une ombre a peine posee. Un seul style
+   pour tout le site : les cartes ne divergent plus d'une page a l'autre. */
+.carte {
+    background: var(--blanc);
+    border: 1px solid var(--trait);
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(23, 33, 46, .04),
+                0 8px 24px -12px rgba(23, 33, 46, .10);
+}
+
+/* --- Les boutons ---------------------------------------------------- */
+.bouton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    border-radius: 10px;
+    padding: .625rem 1.125rem;
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease,
+                transform .1s ease, box-shadow .15s ease;
+}
+
+.bouton:active { transform: translateY(1px); }
+
+/* L'action principale : l'or du tribunal */
+.bouton-or {
+    background: var(--or);
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(184, 144, 31, .3);
+}
+.bouton-or:hover { background: #a37f18; }
+
+/* L'action neutre mais affirmee */
+.bouton-encre {
+    background: var(--encre);
+    color: var(--blanc);
+}
+.bouton-encre:hover { background: #22303f; }
+
+/* L'action discrete : un simple contour */
+.bouton-contour {
+    background: transparent;
+    border-color: var(--trait);
+    color: var(--encre-douce);
+}
+.bouton-contour:hover {
+    border-color: var(--encre-pale);
+    color: var(--encre);
+    background: var(--blanc);
+}
+
+/* --- Les deux boutons de verdict ------------------------------------
+   Larges, francs, sans equivoque : c'est le geste central du site.
+   Les couleurs sont celles de la charte, appliquees des le repos. */
+.bouton-verdict {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    font-family: var(--titres);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: filter .15s ease, transform .1s ease;
+}
+
+.bouton-verdict:hover  { filter: brightness(1.07); }
+.bouton-verdict:active { transform: translateY(1px); }
+
+.verdict-acquitte { background: var(--acquitte); }
+.verdict-coupable { background: var(--coupable); }
+
+/* --- Les champs de formulaire --------------------------------------- */
+.champ {
+    width: 100%;
+    background: var(--blanc);
+    border: 1px solid var(--trait);
+    border-radius: 10px;
+    padding: .625rem .875rem;
+    font-size: .9375rem;
+    color: var(--encre);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.champ::placeholder { color: var(--encre-pale); }
+
+.champ:focus {
+    outline: none;
+    border-color: var(--or);
+    box-shadow: 0 0 0 3px var(--or-voile);
+}
+
+.champ-errone {
+    border-color: var(--coupable);
+    background: var(--coupable-pale);
+}
+
+.etiquette-champ {
+    display: block;
+    margin-bottom: .375rem;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--encre);
+}
+
+.message-erreur {
+    margin-top: .375rem;
+    font-size: .8125rem;
+    color: var(--coupable);
+}
+
+/* --- Le filet : un separateur horizontal discret -------------------- */
+.filet {
+    height: 1px;
+    background: var(--trait);
+    border: none;
+}
+
+
+/* =====================================================================
+   4. LE BANDEAU DU HAUT
+   ===================================================================== */
+
+.bandeau {
+    background: var(--blanc);
+    border-bottom: 1px solid var(--trait);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+/* Le liseré or sous le bandeau : un seul pixel, mais il signe la page. */
+.bandeau::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, var(--or) 0%, var(--or-clair) 45%, transparent 100%);
+}
+
+/* Le sigle TDM, grave dans l'or */
+.logo-sigle {
+    font-family: var(--sigle);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--encre);
+}
+
+/* Les liens de navigation : un trait or se pose sous la page ouverte */
+.lien-page {
+    position: relative;
+    padding: .375rem 0;
+    font-size: .9375rem;
+    font-weight: 500;
+    color: var(--encre-douce);
+    transition: color .15s ease;
+}
+
+.lien-page:hover { color: var(--encre); }
+
+.lien-page[aria-current="page"] { color: var(--encre); font-weight: 600; }
+
+.lien-page[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -.4rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--or);
+}
+
+/* Le separateur vertical qui detache la zone du compte de la navigation */
+.separateur-vertical {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--trait);
+}
+
+/* La pastille du juré connecte */
+.pastille {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--papier-fonce);
+    border: 1px solid var(--trait);
+    font-size: .8125rem;
+    font-weight: 700;
+    color: var(--or);
 }

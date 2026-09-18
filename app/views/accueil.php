@@ -2,51 +2,62 @@
 /**
  * VUE : page d'accueil.
  *
- * Trois etats possibles, dans cet ordre :
- *   1. visiteur non connecte        -> invitation a se connecter
- *   2. $resultats rempli            -> la jauge du verdict (F6)
- *   3. $affaire rempli              -> la carte a juger     (F5)
- *   4. rien a juger                 -> message de fin
+ * Quatre etats, dans cet ordre :
+ *   1. visiteur non connecte  -> invitation a prendre place
+ *   2. $resultats rempli      -> la jauge du verdict (F6)
+ *   3. $affaire rempli        -> la piece a juger     (F5)
+ *   4. rien a juger           -> message de fin
  *
- * Mise en page de la carte et des boutons de vote : Enora.
- *
- * Le controleur (app/controllers/accueil.php) a prepare $affaire,
- * $resultats et $monChoix. Il n'y a ni connexion ni requete ici.
+ * Le controleur a prepare $affaire, $resultats et $monChoix.
+ * Il n'y a ni connexion ni requete SQL ici.
  */
 ?>
 
 <?php if (!estConnecte()): ?>
 
-    <!-- ============ 1. Visiteur non connecte ============ -->
-    <div class="py-12 text-center">
-        <p class="mb-4 text-5xl" aria-hidden="true">&#9878;</p>
-        <h1 class="mb-3 text-3xl font-bold" style="font-family: Georgia, serif;">
-            La séance est ouverte
+    <!-- ============ 1. Le visiteur ============ -->
+    <div class="py-10 text-center sm:py-16">
+
+        <p class="etiquette mb-4">Audience publique</p>
+
+        <h1 class="titre mx-auto mb-5 max-w-lg text-4xl leading-[1.1] sm:text-5xl">
+            Le peuple tranche les querelles minuscules
         </h1>
-        <p class="text-gray-600">
-            Connectez-vous pour plaider votre cause et rendre la justice.
+
+        <p class="mx-auto mb-8 max-w-md text-[15px] leading-relaxed texte-doux">
+            L'ananas sur la pizza, les poubelles jamais sorties, la dernière part
+            de gâteau. Exposez les faits, plaidez votre cause, et laissez le jury
+            populaire rendre son verdict.
         </p>
+
+        <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a href="inscription.php" class="bouton bouton-or w-full sm:w-auto">
+                Prêter serment
+            </a>
+            <a href="connexion.php" class="bouton bouton-contour w-full sm:w-auto">
+                J'ai déjà un compte
+            </a>
+        </div>
+
     </div>
 
 <?php elseif ($resultats !== null): ?>
 
     <!-- ============ 2. Le verdict du peuple (F6) ============ -->
-    <div class="mx-auto max-w-xl">
+    <div>
 
-        <p class="mb-1 text-center text-xs font-semibold uppercase tracking-widest text-gray-400">
-            Verdict du peuple
-        </p>
+        <p class="etiquette mb-2 text-center">Verdict du peuple</p>
 
-        <h2 class="mb-6 text-center text-xl font-bold">
+        <h1 class="titre mb-7 text-center text-2xl sm:text-3xl">
             <?= e($resultats['titre']) ?>
-        </h2>
+        </h1>
 
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div class="carte p-6 sm:p-8">
 
             <?php
             /* La jauge.
-               Les deux pourcentages viennent de la vue v_affaire_stats :
-               MySQL les a deja calcules, on ne fait que les afficher.
+               Les pourcentages viennent de la vue v_affaire_stats : MySQL
+               les a deja calcules, on ne fait que les afficher.
 
                La largeur est ecrite en style="width: X%" et non en classe
                Tailwind : une classe est un texte fige, elle ne peut pas
@@ -55,42 +66,37 @@
             $pctCoupable = (int) $resultats['pct_coupable'];
             ?>
 
-            <!-- Les chiffres, de part et d'autre -->
-            <div class="mb-2 flex items-end justify-between text-sm">
-                <span class="font-semibold text-acquitte">
-                    Acquitté <?= $pctAcquitte ?>%
-                </span>
-                <span class="font-semibold text-coupable">
-                    <?= $pctCoupable ?>% Coupable
-                </span>
+            <div class="mb-3 flex items-baseline justify-between">
+                <div>
+                    <p class="titre text-3xl text-acquitte"><?= $pctAcquitte ?>%</p>
+                    <p class="etiquette mt-0.5">Acquitté</p>
+                </div>
+                <div class="text-right">
+                    <p class="titre text-3xl text-coupable"><?= $pctCoupable ?>%</p>
+                    <p class="etiquette mt-0.5">Coupable</p>
+                </div>
             </div>
 
             <!-- La barre : deux blocs cote a cote dans une gouttiere -->
-            <div class="flex h-5 w-full overflow-hidden rounded-full bg-gray-100">
+            <div class="flex h-3 w-full overflow-hidden rounded-full bg-papier">
                 <div class="bg-acquitte transition-all duration-700"
                      style="width: <?= $pctAcquitte ?>%"></div>
                 <div class="bg-coupable transition-all duration-700"
                      style="width: <?= $pctCoupable ?>%"></div>
             </div>
 
-            <!-- Le detail des voix -->
-            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
-                <span>
-                    <?= (int) $resultats['votes_acquitte'] ?>
-                    voix
-                </span>
-                <span class="font-medium text-gray-600">
+            <div class="mt-3 flex items-center justify-between text-xs text-encre-pale">
+                <span><?= (int) $resultats['votes_acquitte'] ?> voix</span>
+                <span class="font-medium text-encre-douce">
                     <?= (int) $resultats['total_votes'] ?>
                     verdict<?= (int) $resultats['total_votes'] > 1 ? 's' : '' ?> rendu<?= (int) $resultats['total_votes'] > 1 ? 's' : '' ?>
                 </span>
-                <span>
-                    <?= (int) $resultats['votes_coupable'] ?>
-                    voix
-                </span>
+                <span><?= (int) $resultats['votes_coupable'] ?> voix</span>
             </div>
 
             <?php if ($monChoix !== null): ?>
-                <p class="mt-5 border-t border-gray-100 pt-4 text-center text-sm text-gray-600">
+                <hr class="filet my-5">
+                <p class="text-center text-sm texte-doux">
                     Votre verdict :
                     <?php if ($monChoix === 'acquitte'): ?>
                         <span class="font-semibold text-acquitte">Acquitté</span>
@@ -102,11 +108,7 @@
 
         </div>
 
-        <!-- Le cahier des charges ne prevoit pas de cloture du vote :
-             on invite simplement a passer a l'affaire suivante. -->
-        <a href="index.php"
-           class="mt-5 block rounded-lg bg-encre py-3 text-center text-sm font-semibold
-                  text-white hover:bg-gray-800">
+        <a href="index.php" class="bouton bouton-encre mt-5 w-full">
             Affaire suivante →
         </a>
 
@@ -114,54 +116,65 @@
 
 <?php elseif ($affaire !== null): ?>
 
-    <!-- ============ 3. La carte a juger (F5) ============ -->
-    <div class="py-2 lg:py-8">
+    <!-- ============ 3. La piece a juger (F5) ============ -->
+    <div>
 
-        <p class="mb-4 text-center text-5xl" aria-hidden="true">&#9878;</p>
+        <p class="etiquette mb-3 text-center">
+            Affaire n° <?= (int) $affaire['id'] ?>
+        </p>
 
-        <div class="rounded-lg bg-white p-6 shadow-md">
+        <div class="carte overflow-hidden">
 
-            <h2 class="mb-2 text-xl font-bold"><?= e($affaire['titre']) ?></h2>
+            <div class="p-6 sm:p-8">
 
-            <p class="text-gray-600">
-                <?= nl2br(e($affaire['description'])) ?>
-            </p>
+                <h1 class="titre mb-4 text-2xl leading-tight sm:text-[28px]">
+                    <?= e($affaire['titre']) ?>
+                </h1>
 
-            <details class="group w-full">
-                <summary class="flex cursor-pointer items-center justify-between py-4 font-semibold">
-                    <span>Voir les arguments</span>
-                    <span class="transition-transform group-open:rotate-180">↓</span>
-                </summary>
+                <p class="text-[15px] leading-relaxed texte-doux">
+                    <?= nl2br(e($affaire['description'])) ?>
+                </p>
 
-                <div class="border-t border-gray-200 px-4 pb-4 pt-3 text-gray-600">
-                    <?= nl2br(e($affaire['argument_1'])) ?>
-                </div>
+                <hr class="filet my-5">
 
-                <?php if ($affaire['argument_2']): ?>
-                    <div class="border-t border-gray-200 px-4 pb-4 pt-3 text-gray-600">
-                        <?= nl2br(e($affaire['argument_2'])) ?>
+                <details class="group">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
+                        <span class="etiquette">Arguments de la défense</span>
+                        <span class="text-encre-pale transition-transform group-open:rotate-180"
+                              aria-hidden="true">↓</span>
+                    </summary>
+
+                    <div class="mt-4 space-y-3">
+                        <p class="rounded-lg bg-papier px-4 py-3 text-sm leading-relaxed texte-doux">
+                            <?= nl2br(e($affaire['argument_1'])) ?>
+                        </p>
+                        <?php if ($affaire['argument_2']): ?>
+                            <p class="rounded-lg bg-papier px-4 py-3 text-sm leading-relaxed texte-doux">
+                                <?= nl2br(e($affaire['argument_2'])) ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
-                <?php endif; ?>
-            </details>
+                </details>
+
+            </div>
 
             <?php
             /* Les deux boutons sont dans le meme formulaire : ils portent
                le meme name="choix" mais une value differente, donc c'est
                le bouton clique qui decide du vote envoye. */
             ?>
-            <form method="post" action="index.php" class="flex flex-wrap justify-center gap-3">
+            <form method="post" action="index.php"
+                  class="flex gap-3 border-t border-trait bg-papier p-4 sm:p-5">
 
                 <input type="hidden" name="id_affaire" value="<?= (int) $affaire['id'] ?>">
 
                 <button type="submit" name="choix" value="acquitte"
-                        class="rounded-lg bg-green-400 px-8 py-4 text-sm font-medium leading-5
-                               text-white shadow-md hover:bg-acquitte">
+                        class="bouton-verdict verdict-acquitte">
                     Acquitté
                 </button>
 
                 <button type="submit" name="choix" value="coupable"
-                        class="rounded-lg bg-red-400 px-8 py-4 text-sm font-medium leading-5
-                               text-white shadow-md hover:bg-coupable">
+                        class="bouton-verdict verdict-coupable">
                     Coupable
                 </button>
 
@@ -174,15 +187,14 @@
 <?php else: ?>
 
     <!-- ============ 4. Plus rien a juger ============ -->
-    <div class="py-12 text-center">
-        <p class="mb-4 text-5xl" aria-hidden="true">&#9878;</p>
-        <h2 class="mb-2 text-xl font-bold">Vous avez jugé toutes les affaires</h2>
-        <p class="mb-6 text-sm text-gray-600">
-            Le tribunal n'a plus rien à vous soumettre pour le moment.
+    <div class="carte px-6 py-14 text-center">
+        <p class="etiquette mb-3">Séance levée</p>
+        <h1 class="titre mb-2 text-2xl">Vous avez jugé toutes les affaires</h1>
+        <p class="mx-auto mb-7 max-w-sm text-sm texte-doux">
+            Le tribunal n'a plus rien à vous soumettre. À vous de lui donner
+            du travail.
         </p>
-        <a href="affaire-creer.php"
-           class="inline-block rounded-lg bg-dore px-5 py-2.5 text-sm font-semibold text-encre
-                  hover:bg-yellow-500">
+        <a href="affaire-creer.php" class="bouton bouton-or">
             Déposer une affaire
         </a>
     </div>
