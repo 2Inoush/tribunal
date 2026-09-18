@@ -69,7 +69,45 @@ if ($modeDeveloppement) {
 
 
 // =====================================================================
-//  3. SESSION
+//  3. FILET DE SECURITE : AUCUNE ERREUR NE DOIT FUITER EN LIGNE
+// =====================================================================
+// Le try/catch de la section 4 ne protege que la connexion. Si une erreur
+// survient ailleurs (une requete qui echoue, un droit manquant sur la
+// base), PHP afficherait sinon la trace complete au visiteur : chemins
+// des fichiers sur le serveur, nom de la base, nom de l'utilisateur SQL.
+//
+// set_exception_handler() attrape TOUTE erreur non rattrapee, d'ou
+// qu'elle vienne. En developpement on la montre pour pouvoir corriger ;
+// en ligne on affiche une phrase neutre et on ecrit le detail dans le
+// journal d'erreurs du serveur.
+
+set_exception_handler(function (Throwable $erreur) use ($modeDeveloppement) {
+
+    // 500 = « erreur du serveur », le bon code pour ce cas.
+    http_response_code(500);
+
+    if ($modeDeveloppement) {
+        echo '<h1>Erreur</h1>';
+        echo '<p>' . htmlspecialchars($erreur->getMessage(), ENT_QUOTES, 'UTF-8') . '</p>';
+        echo '<p><small>'
+            . htmlspecialchars($erreur->getFile() . ' ligne ' . $erreur->getLine(), ENT_QUOTES, 'UTF-8')
+            . '</small></p>';
+        return;
+    }
+
+    error_log('Erreur non rattrapee : ' . $erreur->getMessage()
+        . ' dans ' . $erreur->getFile() . ' ligne ' . $erreur->getLine());
+
+    echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+        . '<title>Erreur</title></head><body style="font-family: sans-serif; text-align: center; padding: 4rem;">'
+        . '<h1>Le site est momentanement indisponible</h1>'
+        . '<p>Merci de reessayer dans quelques instants.</p>'
+        . '</body></html>';
+});
+
+
+// =====================================================================
+//  4. SESSION
 // =====================================================================
 // La session permet de retenir qui est connecte d'une page a l'autre.
 // session_start() doit etre appele avant tout affichage.
@@ -78,7 +116,7 @@ session_start();
 
 
 // =====================================================================
-//  4. CONNEXION A LA BASE DE DONNEES
+//  5. CONNEXION A LA BASE DE DONNEES
 // =====================================================================
 
 try {
@@ -115,7 +153,7 @@ try {
 
 
 // =====================================================================
-//  5. LA SESSION POINTE-T-ELLE ENCORE SUR UN COMPTE EXISTANT ?
+//  6. LA SESSION POINTE-T-ELLE ENCORE SUR UN COMPTE EXISTANT ?
 // =====================================================================
 // Un cookie de session vit plusieurs jours. Pendant ce temps, le compte
 // qu'il designe peut avoir disparu : compte supprime, ou base reimportee
@@ -147,7 +185,7 @@ if (isset($_SESSION['utilisateur']['id'])) {
 
 
 // =====================================================================
-//  6. PETITES FONCTIONS UTILES
+//  7. PETITES FONCTIONS UTILES
 // =====================================================================
 
 /**
