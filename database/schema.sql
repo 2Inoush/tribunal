@@ -101,6 +101,14 @@ CREATE TABLE vote (
 
 -- =====================================================================
 --  VUES DE LECTURE
+--
+--  « SQL SECURITY INVOKER » est important : sans lui, MySQL retient le
+--  compte qui a cree la vue (son DEFINER) et applique SES droits a
+--  chaque lecture. Une vue importee chez un hebergeur mutualise garde
+--  alors en memoire un compte qui n'y existe pas, et toute lecture
+--  echoue avec « Access denied », meme avec des identifiants corrects.
+--  Avec INVOKER, ce sont les droits du compte qui interroge la vue
+--  qui s'appliquent : le schema devient portable.
 --  Elles évitent de recalculer les compteurs dans le PHP et gardent
 --  les contrôleurs courts (un SELECT = une réponse JSON).
 -- =====================================================================
@@ -109,7 +117,7 @@ CREATE TABLE vote (
 --  v_affaire_stats — l'affaire + son taux de vote en direct        (F6)
 --  Sert aussi à F3 : modification autorisée tant que total_votes = 0.
 -- ---------------------------------------------------------------------
-CREATE OR REPLACE VIEW v_affaire_stats AS
+CREATE OR REPLACE SQL SECURITY INVOKER VIEW v_affaire_stats AS
 SELECT
     a.id,
     a.id_utilisateur,
@@ -141,7 +149,7 @@ GROUP BY a.id, u.pseudo;
 --  v_classement_jures — classement par activité            (F9, bonus)
 --  Départage les égalités : votes, puis affaires, puis ancienneté.
 -- ---------------------------------------------------------------------
-CREATE OR REPLACE VIEW v_classement_jures AS
+CREATE OR REPLACE SQL SECURITY INVOKER VIEW v_classement_jures AS
 SELECT
     u.id,
     u.pseudo,
